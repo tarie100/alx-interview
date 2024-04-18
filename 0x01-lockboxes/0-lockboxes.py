@@ -3,10 +3,12 @@
 a method that determines if all the boxes can be opened.
 """
 
+
 def canUnlockAll(boxes):
     """
     a method that determines
     if all the boxes can be opened
+    based on keys that can be attained.
     """
     # Initialize a set to keep track of unlocked boxes
     unlocked = set([0])
