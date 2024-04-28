@@ -5,18 +5,35 @@ How many operations?
 
 
 def minOperations(n):
-    """
-    a method that calculates the fewest number of operations
-    needed to result in exactly n H characters in the file.
-    """
+    """Calculates the fewest number of operations needed to result in
+    exactly n H characters in the file.
 
-    if n == 1:
+    In a text file, there is a single character H. Your text editor can
+    execute only two operations in this file: Copy All and Paste characters
+    in the file.
+
+    Args:
+        n (int): The number of desired H characters.
+
+    Returns:
+        int: The number of minimal operations needed to get n H characters
+    or 0 if it is impossible to achieve n.
+    """
+    if not isinstance(n, int):
         return 0
-    dp = [float('inf')] * (n + 1)
-    dp[1] = 0
-
-    for i in range(2, n + 1):
-        for j in range(1, i):
-            if i % j == 0:
-                dp[i] = min(dp[i], dp[j] + i // j)
-    return dp[n] if dp[n] != float('inf') else 0
+    ops_count = 0
+    clipboard = 0
+    done = 1
+    while done < n:
+        if clipboard == 0:
+            clipboard = done
+            done += clipboard
+            ops_count += 2
+        elif n - done > 0 and (n - done) % done == 0:
+            clipboard = done
+            done += clipboard
+            ops_count += 2
+        elif clipboard > 0:
+            done += clipboard
+            ops_count += 1
+    return ops_count
