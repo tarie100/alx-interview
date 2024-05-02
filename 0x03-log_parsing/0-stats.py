@@ -1,3 +1,9 @@
+#!/usr/bin/python3
+"""
+log parsing
+"""
+
+
 import sys
 
 def parse_line(line):
