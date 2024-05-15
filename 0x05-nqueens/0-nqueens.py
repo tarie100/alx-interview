@@ -6,6 +6,7 @@
 
 import sys
 
+
 def printSolution(board):
     """
     prints the current arrangement of queens
