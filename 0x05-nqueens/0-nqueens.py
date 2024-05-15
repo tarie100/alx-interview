@@ -9,9 +9,10 @@ import sys
 
 def printSolution(board):
     """
-    prints the current arrangement of queens
-    on the chessboard. It iterates through the board (a 2D list)
-    and prints each cell’s value (0 or 1).
+    prints the current arrangement of queens 
+    on the chessboard. 
+    It iterates through the board (a 2D list) and 
+    prints each cell’s value (0 or 1)
     """
     for i in range(N):
         for j in range(N):
@@ -20,27 +21,28 @@ def printSolution(board):
 
 def isSafe(board, row, col):
     """
-    checks if it’s safe to place a queen at position (row, col)
-    on the board. It verifies that no other queens 
-    threaten the current position
+    checks if it’s safe to place a queen at position (row, col) 
+    on the board. 
+    It verifies that no other queens threaten the current positio
     """
     for i in range(col):
         if board[row][i] == 1:
             return False
-        for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
-            if board[i][j] == 1:
+        for x, y in zip(range(row, -1, -1), range(i, -1, -1)):
+            if board[x][y] == 1:
                 return False
-        for i, j in zip(range(row, N, 1), range(col, -1, -1)):
-            if board[i][j] == 1:
+        for x, y in zip(range(row, N), range(i, -1, -1)):
+            if board[x][y] == 1:
                 return False
     return True
 
 def solveNQUtil(board, col):
     """
-     solves the N-Queens problem. 
-     It tries to place a queen in each row of the current column (col). 
-     If successful, it proceeds to the next column
-     """
+    If col exceeds the board size, 
+    it means we’ve found a solution, 
+    so it returns True.Otherwise, 
+    it tries to place a queen in each row of the current column
+    """
     if col >= N:
         return True
     for i in range(N):
@@ -55,7 +57,7 @@ def solveNQ():
     """
     initializes the board and starts solving 
     the N-Queens problem. If no solution exists, 
-    it prints an error message and exits.
+    it prints an error message and exits
     """
     board = [[0] * N for _ in range(N)]
     if solveNQUtil(board, 0) == False:
