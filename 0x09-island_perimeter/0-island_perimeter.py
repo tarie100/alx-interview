@@ -6,11 +6,14 @@ Island perimeter
 
 def island_perimeter(grid):
     """
-    returns the perimeter of 
-    the island described in grid
+    Calculates the perimeter of the island described in grid
+    Args:
+        grid: 2d list of integers containing 0(water) or 1(land)
+    Return:
+        the perimeter of the island
     """
-    
-     p = 0
+
+    p = 0
     for i in range(len(grid)):
         for j in range(len(grid[i])):
             if (grid[i][j] == 1):
