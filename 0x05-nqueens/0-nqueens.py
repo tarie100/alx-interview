@@ -1,54 +1,62 @@
 #!/usr/bin/python3
-"""Solving N Queens with Backtracing"""
 import sys
 
 
-def nqueens(n, y, board):
-    """
-    Method: nqueens - place n queens
-            on an n by n board so that
-            no queens are attacking any
-            others.
-    Parameters: n is an int that sets
-                board size and # of queens
-    Return: All possible solutions to
-            placement, in list of lists form
-    """
-    for x in range(n):
-        hold = 0
-        for q in board:
-            if x == q[1]:
-                hold = 1
-                break
-            if y - x == q[0] - q[1]:
-                hold = 1
-                break
-            if x - q[1] == q[0] - y:
-                hold = 1
-                break
-        if hold == 0:
-            board.append([y, x])
-            if y != n - 1:
-                nqueens(n, y + 1, board)
-            else:
-                print(board)
-            del board[-1]
-
-
-def main():
-    if len(sys.argv) != 2:
-        print("Usage: nqueens N")
-        sys.exit(1)
-    try:
-        n = int(sys.argv[1])
-    except Exception:
-        print('N must be a number')
-        sys.exit(1)
-    if n < 4:
-        print("N must be at least 4")
-        sys.exit(1)
-
-    nqueens(n, 0, [])
-
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) > 1:
+        try:
+            # number of queens we are solving for
+            board_size = int(sys.argv[1])
+        except Exception:
+            print("N must be a number")
+            exit(1)
+        if board_size < 4:
+            print("N must be at least 4")
+            exit(1)
+
+        # will hold current testing data
+        currentSolution = [0 for x in range(board_size)]
+
+        # found solutions
+        solutions = []
+
+        def isSafe(testRow, testCol):
+            # no need to check for row 0
+            if testRow == 0:
+                return True
+
+            for row in range(0, testRow):
+
+                # check vertical
+                if testCol == currentSolution[row]:
+                    return False
+
+                # diagonal
+                if abs(testRow - row) == abs(testCol - currentSolution[row]):
+                    return False
+
+            # no attack found
+            return True
+
+        def placeQueen(row):
+            global currentSolution, solutions, board_size
+            for col in range(board_size):
+                if not isSafe(row, col):
+                    continue
+                else:
+                    currentSolution[row] = col
+                    if row == (board_size - 1):
+                        #  last row
+                        solution = []
+                        for i in range(len(currentSolution)):
+                            solution.append([i, currentSolution[i]])
+                        solutions.append(solution)
+                    else:
+                        placeQueen(row + 1)
+
+        placeQueen(0)
+        for solution in solutions:
+            print(solution)
+    else:
+        print("Usage: nqueens N")
+        exit(1)
