@@ -1,91 +1,62 @@
 #!/usr/bin/python3
-"""
-N Queens
-"""
 import sys
 
 
-if len(sys.argv) != 2:
-    print('Usage: nqueens N')
-    exit(1)
-N = sys.argv[1]
-try:
-    N = int(N)
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        try:
+            # number of queens we are solving for
+            board_size = int(sys.argv[1])
+        except Exception:
+            print("N must be a number")
+            exit(1)
+        if board_size < 4:
+            print("N must be at least 4")
+            exit(1)
 
-except:
-    print('N must be a number')
-    exit(1)
+        # will hold current testing data
+        currentSolution = [0 for x in range(board_size)]
 
-if N < 4:
-    print('N must be at least 4')
-    exit(1)
+        # found solutions
+        solutions = []
 
-k = 1
+        def isSafe(testRow, testCol):
+            # no need to check for row 0
+            if testRow == 0:
+                return True
 
+            for row in range(0, testRow):
 
-def printSolution(board):
-    """
-    print Solution
-    """
-    queens = []
-    global k
-    k = k + 1
-    for i in range(N):
-        for j in range(N):
-            if board[i][j] == 1:
-                queens.append([i, j])
-    print(queens)
+                # check vertical
+                if testCol == currentSolution[row]:
+                    return False
 
+                # diagonal
+                if abs(testRow - row) == abs(testCol - currentSolution[row]):
+                    return False
 
-def isSafe(board, row, col):
-    """
-    isSafe
-    """
-    for i in range(col):
-        if board[row][i]:
-            return False
-    i = row
-    j = col
-    while i >= 0 and j >= 0:
-        if board[i][j]:
-            return False
-        i -= 1
-        j -= 1
-    i = row
-    j = col
-    while j >= 0 and i < N:
-        if board[i][j]:
-            return False
-        i = i + 1
-        j = j - 1
-    return True
+            # no attack found
+            return True
 
+        def placeQueen(row):
+            global currentSolution, solutions, board_size
+            for col in range(board_size):
+                if not isSafe(row, col):
+                    continue
+                else:
+                    currentSolution[row] = col
+                    if row == (board_size - 1):
+                        #  last row
+                        solution = []
+                        for i in range(len(currentSolution)):
+                            solution.append([i, currentSolution[i]])
+                        solutions.append(solution)
+                    else:
+                        placeQueen(row + 1)
 
-def solveNQUtil(board, col):
-    """
-    solve NQtil
-    """
-    if col == N:
-        printSolution(board)
-        return True
-    res = False
-    for i in range(N):
-        if isSafe(board, i, col):
-            board[i][col] = 1
-            res = solveNQUtil(board, col + 1) or res
-            board[i][col] = 0
-    return res
-
-
-def solveNQ():
-    """
-    solve NQ
-    """
-    board = [[0 for j in range(N)] for i in range(N)]
-    if solveNQUtil(board, 0) is False:
-        pass
-        return
-    return
-
-
-solveNQ()
+        placeQueen(0)
+        for solution in solutions:
+            print(solution)
+    else:
+        print("Usage: nqueens N")
+        exit(1)
